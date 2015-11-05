@@ -1697,7 +1697,7 @@ check_proto:
     } /* switch */
 
 
-    if (!content_type) {
+    if (!content_type && out_len) {
         evhtp_headers_add_header(request->headers_out,
                                  evhtp_header_new("Content-Type", "text/plain", 0, 0));
     }
