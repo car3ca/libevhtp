@@ -1624,7 +1624,6 @@ _evhtp_create_headers(evhtp_header_t * header, void * arg) {
 static evbuf_t *
 _evhtp_create_reply(evhtp_request_t * request, evhtp_res code) {
     evbuf_t     * buf;
-    const char  * content_type;
     char          res_buf[2048];
     int           sres;
     size_t        out_len;
@@ -1633,7 +1632,6 @@ _evhtp_create_reply(evhtp_request_t * request, evhtp_res code) {
     char          out_buf[64];
 
 
-    content_type = evhtp_header_find(request->headers_out, "Content-Type");
     out_len      = evbuffer_get_length(request->buffer_out);
 
     buf          = request->conn->scratch_buf;
@@ -1696,11 +1694,6 @@ check_proto:
             break;
     } /* switch */
 
-
-    if (!content_type) {
-        evhtp_headers_add_header(request->headers_out,
-                                 evhtp_header_new("Content-Type", "text/plain", 0, 0));
-    }
 
     /* attempt to add the status line into a temporary buffer and then use
      * evbuffer_add(). Using plain old snprintf() will be faster than
